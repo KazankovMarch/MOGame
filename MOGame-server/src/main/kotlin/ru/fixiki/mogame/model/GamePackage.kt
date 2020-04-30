@@ -1,5 +1,16 @@
 package ru.fixiki.mogame.model
 
-data class Package(
-        val info: PackageInfo
-)
+data class GamePackage(
+        val name: String,
+        val publisher: String,
+        val difficulty: String,
+        val logo: String,
+        val info: Info
+) {
+    data class Info(
+            val authors: List<String>?,
+            val sources: List<String>?,
+            val comments: String?
+    )
+}
+
