@@ -1,7 +1,7 @@
-package ru.fixiki
+package ru.fixiki.mogame.gui
 
-import ru.fixiki.views.MainView
 import javafx.application.Application
+import ru.fixiki.mogame.gui.views.MainView
 import tornadofx.App
 
 class MyApp: App(MainView::class, Styles::class)

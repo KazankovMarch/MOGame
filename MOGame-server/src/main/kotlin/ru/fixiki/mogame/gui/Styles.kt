@@ -1,4 +1,4 @@
-package ru.fixiki
+package ru.fixiki.mogame.gui
 
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod

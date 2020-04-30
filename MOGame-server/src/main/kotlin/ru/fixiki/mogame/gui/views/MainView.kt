@@ -1,7 +1,7 @@
-package ru.fixiki.views
+package ru.fixiki.mogame.gui.views
 
-import ru.fixiki.Styles
 import javafx.scene.control.Alert.AlertType.INFORMATION
+import ru.fixiki.mogame.gui.Styles
 import tornadofx.*
 
 class MainView : View("Hello TornadoFX") {
