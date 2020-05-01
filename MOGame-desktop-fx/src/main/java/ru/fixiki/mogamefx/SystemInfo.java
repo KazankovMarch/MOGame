@@ -1,4 +1,4 @@
-package ru.fixiki;
+package ru.fixiki.mogamefx;
 
 public class SystemInfo {
 

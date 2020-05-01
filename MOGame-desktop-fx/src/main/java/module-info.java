@@ -1,4 +1,5 @@
 module ru.fixiki {
     requires javafx.controls;
-    exports ru.fixiki;
+    requires javafx.fxml;
+    exports ru.fixiki.mogamefx;
 }
