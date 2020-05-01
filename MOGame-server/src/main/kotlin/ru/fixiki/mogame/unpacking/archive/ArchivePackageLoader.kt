@@ -54,4 +54,8 @@ object ArchivePackageLoader : PackageLoader {
     private fun createSubDirectory(destDirectory: File, newDirectoryName: String) {
         File("${destDirectory.absolutePath}/$newDirectoryName").mkdir()
     }
+
+    fun removePackagesFiles() {
+        //TODO
+    }
 }

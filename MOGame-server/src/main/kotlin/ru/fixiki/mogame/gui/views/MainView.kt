@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.Alert
 import javafx.scene.control.Button
 import javafx.scene.control.Label
-import ru.fixiki.mogame.core.GameServer
+import ru.fixiki.mogame.connection.GameServer
 import ru.fixiki.mogame.gui.Styles
 import tornadofx.*
 import java.io.File
@@ -49,7 +49,7 @@ class MainView : View("MOGame Server") {
                             if (errors.isEmpty()) {
                                 label.text = "Starting..."
                                 runAsyncWithProgress {
-                                    GameServer.start(gamePackageFile.get(), portProperty.get())
+                                    GameServer.start(gamePackageFile.get(), portProperty.get().toInt())
                                 }.ui {
                                     isDisable = true
                                     stopButton.isDisable = false
@@ -86,13 +86,26 @@ class MainView : View("MOGame Server") {
 
     private fun validateData(): List<String> {
         val errors = ArrayList<String>()
-        if (gamePackageFile.get() == null) {
+
+        val gamePackage = gamePackageFile.get()
+        if (gamePackage == null) {
             errors += "Game package not selected"
+        } else {
+            if (!gamePackage.name.endsWith(".siq")) {
+                errors += "Game package does not end with .siq"
+            }
         }
+
         if (portProperty.get() == null) {
             errors += "Server port not specified"
         }
+
         return errors
     }
 
+    override fun onUndock() {
+        runAsync {
+            GameServer.stop()
+        }
+    }
 }
