@@ -36,9 +36,10 @@ object ArchivePackageLoader : PackageLoader {
     }
 
     private fun unpackArchive(archive: File, destDirectory: File) {
-        createSubDirectory(destDirectory, "Texts")
-        createSubDirectory(destDirectory, "Audio")
-        createSubDirectory(destDirectory, "Images")
+        createSubDirectory(destDirectory, TEXTS)
+        createSubDirectory(destDirectory, AUDIO)
+        createSubDirectory(destDirectory, VIDEO)
+        createSubDirectory(destDirectory, IMAGES)
         ZipFile(archive).use { zip ->
             zip.entries().asSequence().forEach { entry ->
                 zip.getInputStream(entry).use { input ->
