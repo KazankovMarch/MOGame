@@ -1,10 +1,12 @@
-package ru.fixiki.mogame.unpacking
+package ru.fixiki.mogame.unpacking.archive
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import ru.fixiki.mogame.model.GamePackage
+import ru.fixiki.mogame.unpacking.MediaContentMultiResolver
+import ru.fixiki.mogame.unpacking.PackageLoader
 import java.io.File
 import java.util.zip.ZipFile
 
@@ -17,6 +19,8 @@ object ArchivePackageLoader : PackageLoader {
     override fun loadPackage(file: File): GamePackage {
         val destDirectory = getDestDirectory(file.nameWithoutExtension)
         unpackArchive(file, destDirectory)
+        MediaContentMultiResolver.setCurrentResolver(ArchiveMediaContentResolver)
+        ArchiveMediaContentResolver.gamePackageDirectory = destDirectory
         val contentXmlFile = File("${destDirectory.absolutePath}/content.xml")
         return xmlMapper.readValue(contentXmlFile)
     }
@@ -32,6 +36,9 @@ object ArchivePackageLoader : PackageLoader {
     }
 
     private fun unpackArchive(archive: File, destDirectory: File) {
+        createSubDirectory(destDirectory, "Texts")
+        createSubDirectory(destDirectory, "Audio")
+        createSubDirectory(destDirectory, "Images")
         ZipFile(archive).use { zip ->
             zip.entries().asSequence().forEach { entry ->
                 zip.getInputStream(entry).use { input ->
@@ -41,5 +48,9 @@ object ArchivePackageLoader : PackageLoader {
                 }
             }
         }
+    }
+
+    private fun createSubDirectory(destDirectory: File, newDirectoryName: String) {
+        File("${destDirectory.absolutePath}/$newDirectoryName").mkdir()
     }
 }
