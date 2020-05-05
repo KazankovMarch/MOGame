@@ -17,7 +17,7 @@ import io.ktor.websocket.webSocket
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import ru.fixiki.mogame_server.core.GameImpl
-import ru.fixiki.mogame_server.model.User
+import ru.fixiki.mogame_server.model.dto.RegistrationRequest
 import ru.fixiki.mogame_server.unpacking.GamePackageLoader
 import java.time.Duration
 
@@ -55,8 +55,8 @@ fun Application.mainModule(testing: Boolean = false) {
     routing {
         post(REGISTRATION_PATH) {
             try {
-                val user = call.receive<User.Info>()
-                call.respond(game.tryRegisterUser(user))
+                val request = call.receive<RegistrationRequest>()
+                call.respond(game.tryRegisterUser(request))
             } catch (e: Exception) {
                 e.printStackTrace()
                 throw e
@@ -64,11 +64,11 @@ fun Application.mainModule(testing: Boolean = false) {
         }
         webSocket(USERS_PATH) {
             val token = (incoming.receive() as? Frame.Text)?.readText()
-            if (token == null || !game.isValidToken(token)) {
+            if (token == null || !game.isTokenValid(token)) {
                 close(reason = CloseReason(CloseReason.Codes.VIOLATED_POLICY, "invalid token"))
                 return@webSocket
             }
-            val changesQueue = game.newUserChangesQueue(token)
+            val changesQueue = game.usersUpdatesQueue(token)
             while (incoming.isEmpty || incoming.receive() !is Frame.Close) {
                 delay(100)
                 while (changesQueue.isNotEmpty()) {

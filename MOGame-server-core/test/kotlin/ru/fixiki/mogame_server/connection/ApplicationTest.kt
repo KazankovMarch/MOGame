@@ -100,10 +100,12 @@ class ApplicationTest {
         handleRequest(HttpMethod.Post, REGISTRATION_PATH) {
             addHeader("content-type", "application/json")
             addHeader("Accept", "application/json")
-            setBody(
+            setBody( //language=json
                 """{
+                    "userInfo": {
                         "nickname": "$name",
                         "role": "$role"
+                        }
                         }""".trimIndent()
             )
         }
