@@ -40,7 +40,7 @@ class ApplicationTest {
             }) {
                 assertEquals(HttpStatusCode.OK, response.status())
                 assertNotNull(response.content)
-                val resp = objectMapper.readValue<RegistrationResponse.Success>(response.content!!)
+                objectMapper.readValue<RegistrationResponse.Success>(response.content!!)
             }
         }
     }
