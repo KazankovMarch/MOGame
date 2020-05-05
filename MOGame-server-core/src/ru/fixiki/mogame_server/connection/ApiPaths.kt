@@ -9,6 +9,11 @@ package ru.fixiki.mogame_server.connection
 const val REGISTRATION = "/registration"
 
 /**
+ * Clients sends his avatars after registration
+ * */
+const val AVATAR = "/avatar"
+
+/**
  * Clients receive common info about game package.
  * E.g. title, authors.
  * */
