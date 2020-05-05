@@ -23,7 +23,7 @@ class ApplicationTest {
     val objectMapper = jacksonObjectMapper()
 
     @Test
-    fun `sdfs dfs`() {
+    fun `registration WHEN request is correct THEN success response`() {
         withTestApplication ({
             (environment.config as MapApplicationConfig).apply {
                 put(GAME_FOLDER_PROPERTY, fullResourcePath(PACKAGE_WITH_CONTENT_XML))
