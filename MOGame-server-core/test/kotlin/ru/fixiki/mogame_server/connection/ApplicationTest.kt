@@ -21,8 +21,6 @@ import ru.fixiki.mogame_server.model.dto.RegistrationResponse
 import ru.fixiki.mogame_server.model.dto.UserUpdate
 import ru.fixiki.mogame_server.testing.FileUtils.fullResourcePath
 import ru.fixiki.mogame_server.unpacking.PACKAGE_WITH_CONTENT_XML
-import ru.fixiki.ru.fixiki.mogame_server.connection.GAME_FOLDER_PROPERTY
-import ru.fixiki.ru.fixiki.mogame_server.connection.mainModule
 import java.util.*
 
 @ExperimentalCoroutinesApi
@@ -38,6 +36,7 @@ class ApplicationTest {
                 put(GAME_FOLDER_PROPERTY, fullResourcePath(PACKAGE_WITH_CONTENT_XML))
             }
             mainModule(testing = true)
+            registration()
         }) {
             with(handleCorrectRegistrationRequest("andrey", User.Role.PLAYER.toString())) {
                 assertEquals(HttpStatusCode.OK, response.status())

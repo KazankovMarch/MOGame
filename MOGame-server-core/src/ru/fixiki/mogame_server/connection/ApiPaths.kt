@@ -30,9 +30,9 @@ const val USERS = "/users"
 const val START = "/start"
 
 /**
- * Clients receive current game table through this socket
+ * Clients receive game table at the start of the round through this socket
  * */
-const val GAME_TABLE = "/game_table"
+const val ROUND_GAME_TABLE = "/round_table"
 
 /**
  * Client selects category and cost of question through this entry point
@@ -40,16 +40,20 @@ const val GAME_TABLE = "/game_table"
 const val QUESTION_SELECT = "/question/select"
 
 /**
- * Clients receive selected question type through this socket
- * E.g. auction, bag cat.
+ * Clients receive selected question info through this socket
+ * E.g. category, cost, type
  * */
-const val CURRENT_QUESTION_TYPE = "/question/type"
+const val CURRENT_QUESTION_INFO = "/question/info"
 
 /**
- * Client makes choice who will answer the question.
- * Other users receive this choice
+ * Client makes choice who will answer the question
  * */
 const val BAG_CAT_CHOICE = "/question/bag_cat_choice"
+
+/**
+ * Clients receive choice made in bag-cat question
+ * */
+const val SHOW_BAG_CAT_CHOICE = "/question/bag_cat_choice/show"
 
 /**
  * Game says who should make a bet now
@@ -58,20 +62,19 @@ const val AUCTION_ORDER = "/question/action/player"
 
 /**
  * Client makes bet.
- * Other users receive this bet.
  * */
-const val AUCTION_BET = "/question/action/player"
+const val AUCTION_BET = "/question/action/bet"
 
 /**
- * Clients receive scenario of the question
+ * Clients receive bet made in auction question
+ * */
+const val SHOW_AUCTION_BET = "/question/action/bet"
+
+/**
+ * Clients receive scenario of the question and signal to show it
+ * (server sends a signal after all clients have successfully downloaded the scenario)
  * */
 const val SCENARIO = "/question/scenario"
-
-/**
- * After all clients have successfully downloaded the script,
- * server sends a signal to show it
- * */
-const val SHOW_SCENARIO = "/question/scenario/show"
 
 /**
  * Client says that he wants to answer the current question.
