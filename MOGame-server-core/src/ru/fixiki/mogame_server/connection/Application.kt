@@ -6,6 +6,7 @@ import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
+import io.ktor.http.Cookie
 import io.ktor.http.cio.websocket.*
 import io.ktor.jackson.jackson
 import io.ktor.request.receive
@@ -16,17 +17,23 @@ import io.ktor.util.KtorExperimentalAPI
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import ru.fixiki.mogame_server.connection.REGISTRATION
+import ru.fixiki.mogame_server.connection.START
+import ru.fixiki.mogame_server.connection.USERS
+import ru.fixiki.mogame_server.core.Game
 import ru.fixiki.mogame_server.core.GameImpl
 import ru.fixiki.mogame_server.model.dto.RegistrationRequest
+import ru.fixiki.mogame_server.model.dto.RegistrationResponse
 import ru.fixiki.mogame_server.unpacking.GamePackageLoader
 import java.time.Duration
+
+lateinit var game: Game
 
 val objectMapper = jacksonObjectMapper()
 
 const val GAME_FOLDER_PROPERTY = "game.folder"
 
-const val REGISTRATION_PATH = "/registration"
-const val USERS_PATH = "/users"
+const val TOKEN_COOKIE_NAME = "mogame_token"
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -50,19 +57,23 @@ fun Application.mainModule(testing: Boolean = false) {
 
     val gameFolder = environment.config.property(GAME_FOLDER_PROPERTY).getString()
     val gamePackage = GamePackageLoader.loadPackage(gameFolder)
-    val game = GameImpl(gamePackage)
+    game = GameImpl(gamePackage)
 
     routing {
-        post(REGISTRATION_PATH) {
+        post(REGISTRATION) {
             try {
                 val request = call.receive<RegistrationRequest>()
-                call.respond(game.tryRegisterUser(request))
+                val response = game.tryRegisterUser(request)
+                if (response is RegistrationResponse.Success) {
+                    call.response.cookies.append(Cookie(name = TOKEN_COOKIE_NAME, value = response.token))
+                }
+                call.respond(response)
             } catch (e: Exception) {
                 e.printStackTrace()
                 throw e
             }
         }
-        webSocket(USERS_PATH) {
+        webSocket(USERS) {
             val token = (incoming.receive() as? Frame.Text)?.readText()
             if (token == null || !game.isTokenValid(token)) {
                 close(reason = CloseReason(CloseReason.Codes.VIOLATED_POLICY, "invalid token"))
@@ -76,7 +87,10 @@ fun Application.mainModule(testing: Boolean = false) {
                 }
             }
         }
-        webSocket("/game") {
+        post(START) {
+
+        }
+        webSocket {
 
         }
     }

@@ -22,8 +22,6 @@ import ru.fixiki.mogame_server.model.dto.UserUpdate
 import ru.fixiki.mogame_server.testing.FileUtils.fullResourcePath
 import ru.fixiki.mogame_server.unpacking.PACKAGE_WITH_CONTENT_XML
 import ru.fixiki.ru.fixiki.mogame_server.connection.GAME_FOLDER_PROPERTY
-import ru.fixiki.ru.fixiki.mogame_server.connection.REGISTRATION_PATH
-import ru.fixiki.ru.fixiki.mogame_server.connection.USERS_PATH
 import ru.fixiki.ru.fixiki.mogame_server.connection.mainModule
 import java.util.*
 
@@ -66,7 +64,7 @@ class ApplicationTest {
 
             val tokens = setOf(token1, token2, token3)
             for (token in tokens) {
-                handleWebSocketConversation(USERS_PATH) { incoming, outgoing ->
+                handleWebSocketConversation(USERS) { incoming, outgoing ->
                     outgoing.send(Frame.Text(token1))
                     val receivedUserNames = HashSet<String>(tokens.size)
                     repeat(tokens.size) {
@@ -97,7 +95,7 @@ class ApplicationTest {
     }
 
     private fun TestApplicationEngine.handleCorrectRegistrationRequest(name: String, role: String) =
-        handleRequest(HttpMethod.Post, REGISTRATION_PATH) {
+        handleRequest(HttpMethod.Post, REGISTRATION) {
             addHeader("content-type", "application/json")
             addHeader("Accept", "application/json")
             setBody( //language=json
