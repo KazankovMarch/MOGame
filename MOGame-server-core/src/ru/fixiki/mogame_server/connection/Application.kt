@@ -1,26 +1,37 @@
 package ru.fixiki.ru.fixiki.mogame_server.connection
 
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.websocket.*
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.features.ContentNegotiation
 import io.ktor.http.cio.websocket.*
-import java.time.*
-import com.fasterxml.jackson.databind.*
-import io.ktor.jackson.*
-import io.ktor.features.*
+import io.ktor.jackson.jackson
 import io.ktor.request.receive
+import io.ktor.response.respond
+import io.ktor.routing.post
+import io.ktor.routing.routing
+import io.ktor.util.KtorExperimentalAPI
+import io.ktor.websocket.webSocket
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import ru.fixiki.mogame_server.core.GameImpl
 import ru.fixiki.mogame_server.model.User
 import ru.fixiki.mogame_server.unpacking.GamePackageLoader
-import java.lang.Exception
+import java.time.Duration
+
+val objectMapper = jacksonObjectMapper()
+
+const val GAME_FOLDER_PROPERTY = "game.folder"
 
 const val REGISTRATION_PATH = "/registration"
-const val GAME_FOLDER_PROPERTY = "game.folder"
+const val USERS_PATH = "/users"
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
+@ExperimentalCoroutinesApi
+@KtorExperimentalAPI
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.mainModule(testing: Boolean = false) {
@@ -51,21 +62,21 @@ fun Application.mainModule(testing: Boolean = false) {
                 throw e
             }
         }
-        webSocket("/users") {
-            val uuid = (incoming.receive() as? Frame.Text)?.readText()
-            if (uuid == null || game.isValidUuid(uuid)) {
-                close(reason = CloseReason(CloseReason.Codes.VIOLATED_POLICY, "invalid UUID"))
+        webSocket(USERS_PATH) {
+            val token = (incoming.receive() as? Frame.Text)?.readText()
+            if (token == null || !game.isValidToken(token)) {
+                close(reason = CloseReason(CloseReason.Codes.VIOLATED_POLICY, "invalid token"))
                 return@webSocket
             }
-            val changesQueue = game.newUserChangesQueue(uuid)
-            while (!outgoing.isClosedForSend || !incoming.isClosedForReceive) {
-                delay(1_000)
-                if (changesQueue.isNotEmpty()) {
-                    call.respond(changesQueue.remove())
+            val changesQueue = game.newUserChangesQueue(token)
+            while (incoming.isEmpty || incoming.receive() !is Frame.Close) {
+                delay(100)
+                while (changesQueue.isNotEmpty()) {
+                    outgoing.send(Frame.Text(objectMapper.writeValueAsString(changesQueue.remove())))
                 }
             }
         }
-        webSocket("/game") { // websocketSession
+        webSocket("/game") {
 
         }
     }

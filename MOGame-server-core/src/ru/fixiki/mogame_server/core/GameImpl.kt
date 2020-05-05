@@ -8,16 +8,18 @@ import java.util.*
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 
-class GameImpl(gamePackage: GamePackage) : Game {
+class GameImpl(private val gamePackage: GamePackage) : Game {
+
+
     override suspend fun tryRegisterUser(userInfo: User.Info): RegistrationResponse {
-        return RegistrationResponse.Success(UUID.randomUUID())
+        return RegistrationResponse.Success(UUID.randomUUID().toString())
     }
 
-    override suspend fun isValidUuid(uuid: String): Boolean {
+    override suspend fun isValidToken(token: String): Boolean {
         return true
     }
 
-    override fun newUserChangesQueue(uuid: String): BlockingQueue<UserUpdate> {
+    override fun newUserChangesQueue(token: String): BlockingQueue<UserUpdate> {
         return ArrayBlockingQueue(1)
     }
 

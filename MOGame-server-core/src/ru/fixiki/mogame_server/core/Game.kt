@@ -7,7 +7,7 @@ import java.util.concurrent.BlockingQueue
 
 interface Game {
     suspend fun tryRegisterUser(userInfo: User.Info): RegistrationResponse
-    suspend fun isValidUuid(uuid: String): Boolean
-    fun newUserChangesQueue(uuid: String): BlockingQueue<UserUpdate>
+    suspend fun isValidToken(token: String): Boolean
+    fun newUserChangesQueue(token: String): BlockingQueue<UserUpdate>
 
 }

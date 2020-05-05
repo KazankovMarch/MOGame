@@ -1,10 +1,8 @@
 package ru.fixiki.mogame_server.model.dto
 
-import java.util.*
-
 sealed class RegistrationResponse {
     data class Success(
-        val uuid: UUID
+        val token: String
     ) : RegistrationResponse()
 
     data class Failure(

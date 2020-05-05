@@ -12,6 +12,8 @@ import io.ktor.server.testing.TestApplicationEngine
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
+import io.ktor.util.KtorExperimentalAPI
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.*
 import org.junit.Test
 import ru.fixiki.mogame_server.model.User
@@ -25,6 +27,8 @@ import ru.fixiki.ru.fixiki.mogame_server.connection.USERS_PATH
 import ru.fixiki.ru.fixiki.mogame_server.connection.mainModule
 import java.util.*
 
+@ExperimentalCoroutinesApi
+@KtorExperimentalAPI
 class ApplicationTest {
 
     private val objectMapper = jacksonObjectMapper()
@@ -63,7 +67,7 @@ class ApplicationTest {
             val tokens = setOf(token1, token2, token3)
             for (token in tokens) {
                 handleWebSocketConversation(USERS_PATH) { incoming, outgoing ->
-                    outgoing.send(Frame.Text(token1.toString()))
+                    outgoing.send(Frame.Text(token1))
                     val receivedUserNames = HashSet<String>(tokens.size)
                     repeat(tokens.size) {
                         with(objectMapper.readValue(incoming.receive().data) as UserUpdate.Joined) {
@@ -79,7 +83,7 @@ class ApplicationTest {
     }
 
     private fun TestApplicationEngine.registerAndGetToken(name: String, role: String) =
-        (tryRegisterUser(name, role) as RegistrationResponse.Success).uuid
+        (tryRegisterUser(name, role) as RegistrationResponse.Success).token
 
     private fun TestApplicationEngine.tryRegisterUser(name: String, role: String): RegistrationResponse {
         val content = handleCorrectRegistrationRequest(name, role).response.content!!
