@@ -26,8 +26,8 @@ fun Application.information() {
             }
             val changesChannel = game.subscribeToUsersInfo(token)
             while (incoming.isEmpty || incoming.receive() !is Frame.Close) {
-                val kee = objectMapper.writeValueAsString(changesChannel.receive())
-                outgoing.send(Frame.Text(kee))
+                val stringUserUpdate = objectMapper.writeValueAsString(changesChannel.receive())
+                outgoing.send(Frame.Text(stringUserUpdate))
             }
             changesChannel.cancel()
             game.disconnectUser(token)
