@@ -21,7 +21,12 @@ fun Application.questions() {
         webSocket(SCENARIO) {
 
         }
+        post(ANSWER_BUTTON) {
 
+        }
+        webSocket(CORRECT_ANSWERS) {
+
+        }
     }
 }
 
