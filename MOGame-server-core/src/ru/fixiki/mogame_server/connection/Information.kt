@@ -8,28 +8,29 @@ import io.ktor.http.cio.websocket.readText
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.websocket.webSocket
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * Module responsible for sending common information about the game.
  * E.g. players score, categories of question
  * */
+@ExperimentalCoroutinesApi
 @Suppress("unused")
 fun Application.information() {
     routing {
         webSocket(USERS) {
             val token = (incoming.receive() as? Frame.Text)?.readText()
-            if (token == null || !game.isTokenValid(token)) {
-                close(reason = CloseReason(CloseReason.Codes.VIOLATED_POLICY, "invalid token"))
+            if (token == null || !game.tokenIsValid(token)) {
+                close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "invalid token"))
                 return@webSocket
             }
-            val changesQueue = game.usersUpdatesQueue(token)
+            val changesChannel = game.subscribeToUsersInfo(token)
             while (incoming.isEmpty || incoming.receive() !is Frame.Close) {
-                val update = changesQueue.poll(5, TimeUnit.SECONDS)
-                if (update != null) {
-                    outgoing.send(Frame.Text(objectMapper.writeValueAsString(update)))
-                }
+                val kee = objectMapper.writeValueAsString(changesChannel.receive())
+                outgoing.send(Frame.Text(kee))
             }
+            changesChannel.cancel()
+            game.disconnectUser(token)
         }
         get(GAME_PACKAGE_INFO) {
 

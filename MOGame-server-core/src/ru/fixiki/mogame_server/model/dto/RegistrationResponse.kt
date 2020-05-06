@@ -10,7 +10,7 @@ sealed class RegistrationResponse {
     ) : RegistrationResponse()
 
     companion object {
-        fun busyNickname() = Failure("nickname is busy")
-        fun gameLeadRoleBusy() = Failure("game lead role is busy")
+        fun busyNickname() = Failure("Nickname is busy")
+        fun busyRole() = Failure("Role is busy")
     }
 }

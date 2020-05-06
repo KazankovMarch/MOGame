@@ -19,7 +19,7 @@ fun Application.registration() {
         post(REGISTRATION) {
             try {
                 val request = call.receive<RegistrationRequest>()
-                val response = game.tryRegisterUser(request)
+                val response = game.tryRegisterUser(request, call.request.cookies[TOKEN_COOKIE_NAME])
                 if (response is RegistrationResponse.Success) {
                     call.response.cookies.append(Cookie(name = TOKEN_COOKIE_NAME, value = response.token))
                 }

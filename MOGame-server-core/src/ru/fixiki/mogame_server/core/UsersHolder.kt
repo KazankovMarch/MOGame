@@ -1,16 +1,21 @@
 package ru.fixiki.mogame_server.core
 
+import kotlinx.coroutines.channels.ReceiveChannel
 import ru.fixiki.mogame_server.model.dto.RegistrationRequest
 import ru.fixiki.mogame_server.model.dto.RegistrationResponse
 import ru.fixiki.mogame_server.model.dto.UserUpdate
-import java.util.concurrent.BlockingQueue
 
 interface UsersHolder {
 
-    fun tryRegisterUser(request: RegistrationRequest): RegistrationResponse
+    suspend fun tryRegisterUser(request: RegistrationRequest, token: String?): RegistrationResponse
 
-    fun isTokenValid(token: String): Boolean
+    fun tokenIsValid(token: String): Boolean
 
-    fun usersUpdatesQueue(token: String): BlockingQueue<UserUpdate>
+    suspend fun subscribeToUsersInfo(token: String): ReceiveChannel<UserUpdate>
 
+    suspend fun disconnectUser(token: String)
+
+    fun nicknameIsBusy(nickname: String): Boolean
+
+    fun gameLeadRoleIsBusy(): Boolean
 }

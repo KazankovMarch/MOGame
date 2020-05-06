@@ -46,13 +46,15 @@ class ApplicationTest {
         }
     }
 
-//  not implemented yet
+    @Test
     fun `users info WHEN users are registered THEN userSocket sends their info`() {
         withTestApplication({
             (environment.config as MapApplicationConfig).apply {
                 put(GAME_FOLDER_PROPERTY, fullResourcePath(PACKAGE_WITH_CONTENT_XML))
             }
             mainModule(testing = true)
+            registration()
+            information()
         }) {
             val names = setOf("Vasya", "Nastya", "Petr")
             val nameIterator = names.iterator()
@@ -67,9 +69,10 @@ class ApplicationTest {
                     outgoing.send(Frame.Text(token1))
                     val receivedUserNames = HashSet<String>(tokens.size)
                     repeat(tokens.size) {
-                        with(objectMapper.readValue(incoming.receive().data) as UserUpdate.Joined) {
+                        val receivedData = incoming.receive().data
+                        with(objectMapper.readValue(receivedData) as UserUpdate.Joined) {
                             assertEquals(user.score, 0)
-                            receivedUserNames.add(user.info.nickname)
+                            receivedUserNames.add(user.nickname)
                         }
                     }
                     assertEquals(names, receivedUserNames)
@@ -99,11 +102,9 @@ class ApplicationTest {
             addHeader("Accept", "application/json")
             setBody( //language=json
                 """{
-                    "userInfo": {
-                        "nickname": "$name",
-                        "role": "$role"
-                        }
-                        }""".trimIndent()
+                    "nickname": "$name", 
+                    "role": "$role"
+                }""".trimIndent()
             )
         }
 }

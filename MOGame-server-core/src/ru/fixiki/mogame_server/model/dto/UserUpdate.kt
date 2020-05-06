@@ -6,9 +6,13 @@ sealed class UserUpdate {
 
     data class Joined(
         val user: User
-    )
+    ) : UserUpdate()
+
+    data class Changed(
+        val user: User
+    ) : UserUpdate()
 
     data class Left(
         val nickname: String
-    )
+    ) : UserUpdate()
 }

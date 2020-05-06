@@ -1,8 +1,10 @@
 package ru.fixiki.mogame_server.model
 
 data class User(
-    val info: Info,
-    var score: Int
+    val nickname: String,
+    val role: Role,
+    val avatar: ByteArray? = null,
+    var score: Int = 0
 ) {
 
     enum class Role(value: String) {
@@ -10,11 +12,5 @@ data class User(
         GAME_LEAD("game_lead")
         //TODO SPECTATOR("spectator")
     }
-
-    data class Info(
-        val nickname: String,
-        val role: Role,
-        val avatar: ByteArray?
-    )
 
 }
