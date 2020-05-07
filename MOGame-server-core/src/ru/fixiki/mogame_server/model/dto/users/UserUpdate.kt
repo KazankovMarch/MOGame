@@ -5,14 +5,14 @@ import ru.fixiki.mogame_server.model.User
 sealed class UserUpdate {
 
     data class Joined(
-        val user: User
+        val joinedUser: User
     ) : UserUpdate()
 
     data class Changed(
-        val user: User
+        val changedUser: User
     ) : UserUpdate()
 
     data class Left(
-        val nickname: String
+        val leftUserNickname: String
     ) : UserUpdate()
 }

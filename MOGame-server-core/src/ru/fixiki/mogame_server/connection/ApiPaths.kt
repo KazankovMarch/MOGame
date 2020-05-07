@@ -5,8 +5,9 @@ package ru.fixiki.mogame_server.connection
  * Clients must pass registration before entering game or reconnecting.
  * In next HTTP requests token cookie must exists.
  * In next WebSocket connections token must be first message from client.
+ * Clients receive information about other clients through this socket
  * */
-const val REGISTRATION = "/registration"
+const val USERS = "/users"
 
 /**
  * Clients sends his avatars after registration
@@ -18,11 +19,6 @@ const val AVATAR = "/avatar"
  * E.g. title, authors.
  * */
 const val GAME_PACKAGE_INFO = "/package_info"
-
-/**
- * Clients receive information about other clients through this socket
- * */
-const val USERS = "/users"
 
 /**
  * Game lead starts the game through this entry point

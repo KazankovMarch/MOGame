@@ -1,4 +1,4 @@
-package ru.fixiki.mogame_server.model.dto.registration
+package ru.fixiki.mogame_server.model.dto.users
 
 sealed class RegistrationResponse {
     data class Success(
@@ -10,10 +10,8 @@ sealed class RegistrationResponse {
     ) : RegistrationResponse()
 
     companion object {
-        fun busyNickname() =
-            Failure("Nickname is busy")
+        fun busyNickname() = Failure("Nickname is busy")
 
-        fun busyRole() =
-            Failure("Role is busy")
+        fun busyRole() = Failure("Role is busy")
     }
 }
