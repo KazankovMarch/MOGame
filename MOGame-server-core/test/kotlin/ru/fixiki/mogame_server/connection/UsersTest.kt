@@ -16,9 +16,10 @@ import ru.fixiki.mogame_server.model.User
 import ru.fixiki.mogame_server.model.dto.users.RegistrationResponse
 import ru.fixiki.mogame_server.model.dto.users.UserUpdate
 import ru.fixiki.mogame_server.testing.FileUtils.fullResourcePath
-import ru.fixiki.mogame_server.testing.handleUsersWebSocketConversationWithRegistration
+import ru.fixiki.mogame_server.testing.handleUsersWebSocketConversation
 import ru.fixiki.mogame_server.unpacking.PACKAGE_WITH_CONTENT_XML
 import java.util.*
+import java.util.concurrent.CountDownLatch
 
 @ExperimentalCoroutinesApi
 @KtorExperimentalAPI
@@ -35,7 +36,7 @@ internal class UsersTest {
 
     @Test
     fun `registration WHEN request is correct THEN success response`(): Unit = withDefaultTestApplication {
-        handleUsersWebSocketConversationWithRegistration("Andrey", User.Role.PLAYER) { incoming, _ ->
+        handleUsersWebSocketConversation("Andrey", User.Role.PLAYER) { incoming, _ ->
             incoming.receiveT<RegistrationResponse.Success>()
         }
     }
@@ -43,27 +44,47 @@ internal class UsersTest {
     @Test
     fun `registration WHEN nickname is busy THEN busyNickname response`(): Unit = withDefaultTestApplication {
         val name = "same name"
-        handleUsersWebSocketConversationWithRegistration(name, User.Role.PLAYER) { firstPlayerIncomingData, _ ->
-            firstPlayerIncomingData.receiveT<RegistrationResponse.Success>()
-            handleUsersWebSocketConversationWithRegistration(name, User.Role.GAME_LEAD) { secondPlayerIncomingData, _ ->
-                val response: RegistrationResponse.Failure = secondPlayerIncomingData.receiveT()
+        handleUsersWebSocketConversation(name, User.Role.PLAYER) { firstPlayerIncoming, _ ->
+            firstPlayerIncoming.receiveT<RegistrationResponse.Success>()
+            handleUsersWebSocketConversation(name, User.Role.GAME_LEAD) { secondPlayerIncoming, _ ->
+                val response: RegistrationResponse.Failure = secondPlayerIncoming.receiveT()
                 assertEquals(RegistrationResponse.busyNickname(), response)
             }
         }
     }
 
-
     @Test
     fun `registration WHEN game-lead role is busy THEN roleIsBusy response`(): Unit = withDefaultTestApplication {
-        handleUsersWebSocketConversationWithRegistration("Dinara", User.Role.GAME_LEAD) { firstPlayerIncomingData, _ ->
-            firstPlayerIncomingData.receiveT<RegistrationResponse.Success>()
-            handleUsersWebSocketConversationWithRegistration(
-                "Andrey",
-                User.Role.GAME_LEAD
-            ) { secondPlayerIncomingData, _ ->
-                val response: RegistrationResponse.Failure = secondPlayerIncomingData.receiveT()
+        handleUsersWebSocketConversation("Dinara", User.Role.GAME_LEAD) { firstPlayerIncoming, _ ->
+            firstPlayerIncoming.receiveT<RegistrationResponse.Success>()
+            handleUsersWebSocketConversation("Andrey", User.Role.GAME_LEAD) { secondPlayerIncoming, _ ->
+                val response: RegistrationResponse.Failure = secondPlayerIncoming.receiveT()
                 assertEquals(RegistrationResponse.busyRole(), response)
             }
+        }
+    }
+
+    @Test
+    fun `registration WHEN nickname is released THEN success response`(): Unit = withDefaultTestApplication {
+        val name = "same name"
+        handleUsersWebSocketConversation(name, User.Role.PLAYER) { firstPlayerIncoming, _ ->
+            firstPlayerIncoming.receiveT<RegistrationResponse.Success>()
+        }
+        Thread.sleep(1000)
+        handleUsersWebSocketConversation(name, User.Role.GAME_LEAD) { secondPlayerIncoming, _ ->
+            secondPlayerIncoming.receiveT<RegistrationResponse.Success>()
+        }
+    }
+
+
+    @Test
+    fun `registration WHEN game-lead role is released THEN success response`(): Unit = withDefaultTestApplication {
+        handleUsersWebSocketConversation("Dinara", User.Role.GAME_LEAD) { firstPlayerIncoming, _ ->
+            firstPlayerIncoming.receiveT<RegistrationResponse.Success>()
+        }
+        Thread.sleep(1000)
+        handleUsersWebSocketConversation("Andrey", User.Role.GAME_LEAD) { secondPlayerIncoming, _ ->
+            secondPlayerIncoming.receiveT<RegistrationResponse.Success>()
         }
     }
 
@@ -71,9 +92,11 @@ internal class UsersTest {
     fun `users info WHEN users are registered THEN userSocket sends their info`(): Unit = withDefaultTestApplication {
         val names = setOf("Vasya", "Nastya", "Petr")
 
+        val latch = CountDownLatch(names.size)
+
         val futures = names.map { name ->
             async {
-                handleUsersWebSocketConversationWithRegistration(name, User.Role.PLAYER) { incoming, _ ->
+                handleUsersWebSocketConversation(name, User.Role.PLAYER) { incoming, _ ->
                     incoming.receiveT<RegistrationResponse.Success>()
                     val receivedUserNames = HashSet<String>(names.size)
                     repeat(names.size) {
@@ -90,6 +113,8 @@ internal class UsersTest {
                         println(joined)
                     }
                     assertTrue(incoming.isEmpty)
+                    latch.countDown()
+                    latch.await()
                 }
             }
         }
@@ -103,7 +128,7 @@ internal class UsersTest {
         val userLeftNickname = "Bob"
 
         val firstUserHandling = async {
-            handleUsersWebSocketConversationWithRegistration("Robert", User.Role.GAME_LEAD) { incoming, _ ->
+            handleUsersWebSocketConversation("Robert", User.Role.GAME_LEAD) { incoming, _ ->
                 incoming.receiveT<RegistrationResponse.Success>()
                 val receiveT = incoming.receiveT<UserUpdate.Joined>()
                 println("A1 $receiveT")
@@ -113,7 +138,7 @@ internal class UsersTest {
                 assertEquals(userLeftNickname, userLeftUpdate.leftUserNickname)
             }
         }
-        handleUsersWebSocketConversationWithRegistration(userLeftNickname, User.Role.PLAYER) { incoming, outgoing ->
+        handleUsersWebSocketConversation(userLeftNickname, User.Role.PLAYER) { incoming, _ ->
             incoming.receiveT<RegistrationResponse.Success>()
             val receiveT = incoming.receiveT<UserUpdate.Joined>()
             println("B1 $receiveT")

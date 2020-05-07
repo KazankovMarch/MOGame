@@ -42,7 +42,7 @@ fun TestApplicationEngine.handleCorrectRegistrationRequest(name: String, role: S
         )
     }
 
-fun TestApplicationEngine.handleUsersWebSocketConversationWithRegistration(
+fun TestApplicationEngine.handleUsersWebSocketConversation(
     nickname: String,
     role: User.Role,
     callback: (suspend TestApplicationCall.(incoming: ReceiveChannel<Frame>, outgoing: SendChannel<Frame>) -> Unit)? = null
