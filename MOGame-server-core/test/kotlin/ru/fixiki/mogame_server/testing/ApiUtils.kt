@@ -9,10 +9,11 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import ru.fixiki.mogame_server.connection.REGISTRATION
 import ru.fixiki.mogame_server.connection.objectMapper
+import ru.fixiki.mogame_server.model.User
 import ru.fixiki.mogame_server.model.dto.registration.RegistrationResponse
 
-fun TestApplicationEngine.registerAndGetToken(name: String, role: String) =
-    (tryRegisterUser(name, role) as RegistrationResponse.Success).token
+fun TestApplicationEngine.registerAndGetToken(name: String, role: User.Role) =
+    (tryRegisterUser(name, role.toString()) as RegistrationResponse.Success).token
 
 fun TestApplicationEngine.tryRegisterUser(name: String, role: String): RegistrationResponse {
     val content = handleCorrectRegistrationRequest(name, role).response.content!!

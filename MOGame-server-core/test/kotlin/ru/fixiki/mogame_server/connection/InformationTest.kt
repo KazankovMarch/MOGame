@@ -39,9 +39,9 @@ internal class InformationTest {
         val names = setOf("Vasya", "Nastya", "Petr")
         val nameIterator = names.iterator()
 
-        val token1 = registerAndGetToken(nameIterator.next(), User.Role.GAME_LEAD.toString())
-        val token2 = registerAndGetToken(nameIterator.next(), User.Role.PLAYER.toString())
-        val token3 = registerAndGetToken(nameIterator.next(), User.Role.PLAYER.toString())
+        val token1 = registerAndGetToken(nameIterator.next(), User.Role.GAME_LEAD)
+        val token2 = registerAndGetToken(nameIterator.next(), User.Role.PLAYER)
+        val token3 = registerAndGetToken(nameIterator.next(), User.Role.PLAYER)
 
         val tokens = setOf(token1, token2, token3)
 
@@ -76,8 +76,8 @@ internal class InformationTest {
     fun `user info WHEN user leaves THEN userSocket send it's Left update`(): Unit = withDefaultTestApplication {
 
         val userLeftNickname = "Bob"
-        val token1 = registerAndGetToken("Andrey", User.Role.GAME_LEAD.toString())
-        val token2 = registerAndGetToken(userLeftNickname, User.Role.PLAYER.toString())
+        val token1 = registerAndGetToken("Andrey", User.Role.GAME_LEAD)
+        val token2 = registerAndGetToken(userLeftNickname, User.Role.PLAYER)
 
         val firstUserHandling = async {
             handleWebSocketConversation(USERS) { incoming, outgoing ->
