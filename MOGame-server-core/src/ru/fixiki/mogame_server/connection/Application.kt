@@ -2,14 +2,18 @@ package ru.fixiki.mogame_server.connection
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
+import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.pingPeriod
 import io.ktor.http.cio.websocket.timeout
 import io.ktor.jackson.jackson
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.SendChannel
 import ru.fixiki.mogame_server.core.Game
 import ru.fixiki.mogame_server.core.GameImpl
 import ru.fixiki.mogame_server.unpacking.GamePackageLoader
@@ -48,3 +52,10 @@ fun Application.mainModule(testing: Boolean = false) {
     game = GameImpl(gamePackage)
 }
 
+
+suspend inline fun <reified T> ReceiveChannel<Frame>.receiveT() =
+    objectMapper.readValue(receive().data) as T
+
+
+suspend inline fun <reified T> SendChannel<Frame>.sendT(value: T) =
+    send(Frame.Text(objectMapper.writeValueAsString(value)))

@@ -1,9 +1,8 @@
 package ru.fixiki.mogame_server.core
 
-import kotlinx.coroutines.channels.ReceiveChannel
-import ru.fixiki.mogame_server.model.dto.RegistrationRequest
-import ru.fixiki.mogame_server.model.dto.RegistrationResponse
-import ru.fixiki.mogame_server.model.dto.UserUpdate
+import ru.fixiki.mogame_server.model.dto.registration.RegistrationRequest
+import ru.fixiki.mogame_server.model.dto.registration.RegistrationResponse
+import ru.fixiki.mogame_server.model.dto.users.UsersInfoSubscriptionResponse
 
 interface UsersHolder {
 
@@ -11,7 +10,7 @@ interface UsersHolder {
 
     fun tokenIsValid(token: String): Boolean
 
-    suspend fun subscribeToUsersInfo(token: String): ReceiveChannel<UserUpdate>
+    suspend fun subscribeToUsersInfo(token: String): UsersInfoSubscriptionResponse
 
     suspend fun disconnectUser(token: String)
 

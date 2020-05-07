@@ -1,16 +1,14 @@
 package ru.fixiki.mogame_server.core
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import ru.fixiki.mogame_server.model.User
-import ru.fixiki.mogame_server.model.dto.RegistrationRequest
-import ru.fixiki.mogame_server.model.dto.RegistrationResponse
-import ru.fixiki.mogame_server.model.dto.UserUpdate
+import ru.fixiki.mogame_server.model.dto.registration.RegistrationRequest
+import ru.fixiki.mogame_server.model.dto.registration.RegistrationResponse
+import ru.fixiki.mogame_server.model.dto.users.UserUpdate
+import ru.fixiki.mogame_server.model.dto.users.UsersInfoSubscriptionResponse
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentSkipListSet
@@ -35,10 +33,6 @@ class UsersHolderImpl : UsersHolder {
     ): RegistrationResponse {
         with(request) {
             if (token != null && tokenIsValid(token)) {
-                connectedUsersMutex.withLock {
-                    connectedUsers.add(token)
-                    usersBroadcastChannel.send(UserUpdate.Joined(users[token]!!))
-                }
                 return RegistrationResponse.Success(token)
             }
 
@@ -47,34 +41,25 @@ class UsersHolderImpl : UsersHolder {
                 gameLeadRoleIsBusy() -> RegistrationResponse.busyRole()
                 else -> {
                     val newToken = newToken()
-                    connectedUsersMutex.withLock {
-                        users[newToken] = User(nickname, role)
-                        connectedUsers.add(newToken)
-                        connectedUsers.add(newToken)
-                    }
+                    users[newToken] = User(nickname, role)
                     RegistrationResponse.Success(newToken)
                 }
             }
         }
     }
 
-    //    TODO refactor
-    override suspend fun subscribeToUsersInfo(token: String): ReceiveChannel<UserUpdate> {
-        val withLock = connectedUsersMutex.withLock {
-            return@withLock Pair(
-                first = usersBroadcastChannel.openSubscription(),
-                second = connectedUsers.map { users[it]!! })
+    override suspend fun subscribeToUsersInfo(token: String): UsersInfoSubscriptionResponse =
+        connectedUsersMutex.withLock {
+            val subscription = usersBroadcastChannel.openSubscription()
+            val initValues = connectedUsers.map { UserUpdate.Joined(users[it]!!) }
+            connectedUsers.add(token)
+            usersBroadcastChannel.send(UserUpdate.Joined(users[token]!!))
+            return UsersInfoSubscriptionResponse(subscription, initValues)
         }
-        return GlobalScope.produce {
-            withLock.second.forEach { send(UserUpdate.Joined(it)) }
-            while (!isClosedForSend) {
-                send(withLock.first.receive())
-            }
-            withLock.first.cancel()
-        }
-    }
 
     override suspend fun disconnectUser(token: String) {
+        if (!connectedUsers.contains(token)) return
+
         connectedUsersMutex.withLock {
             connectedUsers.remove(token)
             usersBroadcastChannel.send(UserUpdate.Left(users[token]!!.nickname))

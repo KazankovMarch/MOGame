@@ -10,7 +10,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import ru.fixiki.mogame_server.model.User
-import ru.fixiki.mogame_server.model.dto.RegistrationResponse
+import ru.fixiki.mogame_server.model.dto.registration.RegistrationResponse
 import ru.fixiki.mogame_server.testing.FileUtils.fullResourcePath
 import ru.fixiki.mogame_server.testing.handleCorrectRegistrationRequest
 import ru.fixiki.mogame_server.unpacking.PACKAGE_WITH_CONTENT_XML

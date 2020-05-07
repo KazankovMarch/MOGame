@@ -1,4 +1,4 @@
-package ru.fixiki.mogame_server.model.dto
+package ru.fixiki.mogame_server.model.dto.registration
 
 import ru.fixiki.mogame_server.model.User
 

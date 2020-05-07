@@ -7,8 +7,8 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.routing.routing
-import ru.fixiki.mogame_server.model.dto.RegistrationRequest
-import ru.fixiki.mogame_server.model.dto.RegistrationResponse
+import ru.fixiki.mogame_server.model.dto.registration.RegistrationRequest
+import ru.fixiki.mogame_server.model.dto.registration.RegistrationResponse
 
 /**
  * Module responsible for entering game and editing profile

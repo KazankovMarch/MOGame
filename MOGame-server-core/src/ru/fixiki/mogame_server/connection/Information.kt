@@ -9,6 +9,9 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.channels.receiveOrNull
+import ru.fixiki.mogame_server.model.dto.users.UsersInfoSubscriptionResponse
 
 /**
  * Module responsible for sending common information about the game.
@@ -24,13 +27,20 @@ fun Application.information() {
                 close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "invalid token"))
                 return@webSocket
             }
-            val changesChannel = game.subscribeToUsersInfo(token)
-            while (incoming.isEmpty || incoming.receive() !is Frame.Close) {
-                val stringUserUpdate = objectMapper.writeValueAsString(changesChannel.receive())
-                outgoing.send(Frame.Text(stringUserUpdate))
+            var subscriptionResponse: UsersInfoSubscriptionResponse? = null
+            try {
+                subscriptionResponse = game.subscribeToUsersInfo(token)
+                run {
+                    subscriptionResponse.initValues.forEach { outgoing.sendT(it) }
+                    subscriptionResponse.subscription.consumeEach { outgoing.sendT(it) }
+                }
+                while (true) {
+                    incoming.receiveOrNull() ?: break
+                }
+            } finally {
+                game.disconnectUser(token)
+                subscriptionResponse?.subscription?.cancel()
             }
-            changesChannel.cancel()
-            game.disconnectUser(token)
         }
         get(GAME_PACKAGE_INFO) {
 
