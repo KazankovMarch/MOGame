@@ -98,10 +98,10 @@ internal class UsersTest {
         withDefaultTestApplication {
             var token: String? = null
             handleUsersWebSocketConversation("Andrey", User.Role.PLAYER) { andreyIncoming, _ ->
-                andreyIncoming.receiveT<RegistrationResponse.Success>().token
                 handleUsersWebSocketConversation("Dinara", User.Role.GAME_LEAD) { dinaraIncoming, _ ->
                     token = dinaraIncoming.receiveT<RegistrationResponse.Success>().token
                 }
+                andreyIncoming.receiveT<RegistrationResponse.Success>().token
                 andreyIncoming.receiveT<UserUpdate.Joined>()
                 andreyIncoming.receiveT<UserUpdate.Joined>()
                 andreyIncoming.receiveT<UserUpdate.Left>()
@@ -133,8 +133,7 @@ internal class UsersTest {
                     assertEquals(names, receivedUserNames)
                     while (!incoming.isEmpty) {
                         val receive = incoming.receive()
-                        val joined = objectMapper.readValue(receive.data) as UserUpdate.Joined
-                        println(joined)
+                        objectMapper.readValue(receive.data) as UserUpdate.Joined
                     }
                     assertTrue(incoming.isEmpty)
                     latch.countDown()
@@ -154,20 +153,16 @@ internal class UsersTest {
         val firstUserHandling = async {
             handleUsersWebSocketConversation("Robert", User.Role.GAME_LEAD) { incoming, _ ->
                 incoming.receiveT<RegistrationResponse.Success>()
-                val receiveT = incoming.receiveT<UserUpdate.Joined>()
-                println("A1 $receiveT")
-                val receiveT1 = incoming.receiveT<UserUpdate.Joined>()
-                println("A1 $receiveT1")
+                incoming.receiveT<UserUpdate.Joined>()
+                incoming.receiveT<UserUpdate.Joined>()
                 val userLeftUpdate = incoming.receiveT<UserUpdate.Left>()
                 assertEquals(userLeftNickname, userLeftUpdate.leftUserNickname)
             }
         }
         handleUsersWebSocketConversation(userLeftNickname, User.Role.PLAYER) { incoming, _ ->
             incoming.receiveT<RegistrationResponse.Success>()
-            val receiveT = incoming.receiveT<UserUpdate.Joined>()
-            println("B1 $receiveT")
-            val receiveT1 = incoming.receiveT<UserUpdate.Joined>()
-            println("B2 $receiveT1")
+            incoming.receiveT<UserUpdate.Joined>()
+            incoming.receiveT<UserUpdate.Joined>()
         }
 
         runBlocking {
