@@ -1,5 +1,6 @@
 package ru.fixiki.mogame_server.connection
 
+import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.config.MapApplicationConfig
 import io.ktor.server.testing.TestApplicationEngine
@@ -9,6 +10,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import org.awaitility.Awaitility.await
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -17,9 +19,11 @@ import ru.fixiki.mogame_server.model.dto.users.RegistrationResponse
 import ru.fixiki.mogame_server.model.dto.users.UserUpdate
 import ru.fixiki.mogame_server.testing.FileUtils.fullResourcePath
 import ru.fixiki.mogame_server.testing.handleUsersWebSocketConversation
+import ru.fixiki.mogame_server.testing.untilNotThrows
 import ru.fixiki.mogame_server.unpacking.PACKAGE_WITH_CONTENT_XML
 import java.util.*
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 @ExperimentalCoroutinesApi
 @KtorExperimentalAPI
@@ -66,25 +70,26 @@ internal class UsersTest {
 
     @Test
     fun `registration WHEN nickname is released THEN success response`(): Unit = withDefaultTestApplication {
-        val name = "same name"
-        handleUsersWebSocketConversation(name, User.Role.PLAYER) { firstPlayerIncoming, _ ->
+        val popularNickname = "da Vinci"
+        handleUsersWebSocketConversation(popularNickname, User.Role.PLAYER) { firstPlayerIncoming, _ ->
             firstPlayerIncoming.receiveT<RegistrationResponse.Success>()
         }
-        Thread.sleep(1000)
-        handleUsersWebSocketConversation(name, User.Role.GAME_LEAD) { secondPlayerIncoming, _ ->
-            secondPlayerIncoming.receiveT<RegistrationResponse.Success>()
+        await().atMost(1, TimeUnit.SECONDS).untilNotThrows(JsonMappingException::class) {
+            handleUsersWebSocketConversation(popularNickname, User.Role.GAME_LEAD) { secondPlayerIncoming, _ ->
+                secondPlayerIncoming.receiveT<RegistrationResponse.Success>()
+            }
         }
     }
-
 
     @Test
     fun `registration WHEN game-lead role is released THEN success response`(): Unit = withDefaultTestApplication {
         handleUsersWebSocketConversation("Dinara", User.Role.GAME_LEAD) { firstPlayerIncoming, _ ->
             firstPlayerIncoming.receiveT<RegistrationResponse.Success>()
         }
-        Thread.sleep(1000)
-        handleUsersWebSocketConversation("Andrey", User.Role.GAME_LEAD) { secondPlayerIncoming, _ ->
-            secondPlayerIncoming.receiveT<RegistrationResponse.Success>()
+        await().atMost(1, TimeUnit.SECONDS).untilNotThrows(JsonMappingException::class) {
+            handleUsersWebSocketConversation("Andrey", User.Role.GAME_LEAD) { secondPlayerIncoming, _ ->
+                secondPlayerIncoming.receiveT<RegistrationResponse.Success>()
+            }
         }
     }
 
@@ -92,17 +97,17 @@ internal class UsersTest {
     fun `registration WHEN user reconnected with valid token THEN response is the same token`(): Unit =
         withDefaultTestApplication {
             var token: String? = null
-            handleUsersWebSocketConversation("Andrey", User.Role.PLAYER) { incoming, _ ->
-                incoming.receiveT<RegistrationResponse.Success>().token
-                handleUsersWebSocketConversation("Dinara", User.Role.GAME_LEAD) { incoming, _ ->
-                    token = incoming.receiveT<RegistrationResponse.Success>().token
+            handleUsersWebSocketConversation("Andrey", User.Role.PLAYER) { andreyIncoming, _ ->
+                andreyIncoming.receiveT<RegistrationResponse.Success>().token
+                handleUsersWebSocketConversation("Dinara", User.Role.GAME_LEAD) { dinaraIncoming, _ ->
+                    token = dinaraIncoming.receiveT<RegistrationResponse.Success>().token
                 }
-                incoming.receiveT<UserUpdate.Joined>()
-                incoming.receiveT<UserUpdate.Joined>()
-                incoming.receiveT<UserUpdate.Left>()
+                andreyIncoming.receiveT<UserUpdate.Joined>()
+                andreyIncoming.receiveT<UserUpdate.Joined>()
+                andreyIncoming.receiveT<UserUpdate.Left>()
             }
-            handleUsersWebSocketConversation("Dinara_228", User.Role.GAME_LEAD, token) { firstPlayerIncoming, _ ->
-                val response = firstPlayerIncoming.receiveT<RegistrationResponse.Success>()
+            handleUsersWebSocketConversation("Dinara_228", User.Role.GAME_LEAD, token) { dinaraIncoming, _ ->
+                val response = dinaraIncoming.receiveT<RegistrationResponse.Success>()
                 assertEquals(token, response.token)
             }
         }

@@ -74,11 +74,17 @@
             <version>2.9.8</version>
         </dependency>
 
-<!--TESTING-->
+        <!--TESTING-->
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-tests</artifactId>
             <version>${ktor_version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>4.0.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
