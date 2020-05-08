@@ -89,6 +89,25 @@ internal class UsersTest {
     }
 
     @Test
+    fun `registration WHEN user reconnected with valid token THEN response is the same token`(): Unit =
+        withDefaultTestApplication {
+            var token: String? = null
+            handleUsersWebSocketConversation("Andrey", User.Role.PLAYER) { incoming, _ ->
+                incoming.receiveT<RegistrationResponse.Success>().token
+                handleUsersWebSocketConversation("Dinara", User.Role.GAME_LEAD) { incoming, _ ->
+                    token = incoming.receiveT<RegistrationResponse.Success>().token
+                }
+                incoming.receiveT<UserUpdate.Joined>()
+                incoming.receiveT<UserUpdate.Joined>()
+                incoming.receiveT<UserUpdate.Left>()
+            }
+            handleUsersWebSocketConversation("Dinara_228", User.Role.GAME_LEAD, token) { firstPlayerIncoming, _ ->
+                val response = firstPlayerIncoming.receiveT<RegistrationResponse.Success>()
+                assertEquals(token, response.token)
+            }
+        }
+
+    @Test
     fun `users info WHEN users are registered THEN userSocket sends their info`(): Unit = withDefaultTestApplication {
         val names = setOf("Vasya", "Nastya", "Petr")
 

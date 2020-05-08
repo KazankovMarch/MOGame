@@ -45,15 +45,23 @@ fun TestApplicationEngine.handleCorrectRegistrationRequest(name: String, role: S
 fun TestApplicationEngine.handleUsersWebSocketConversation(
     nickname: String,
     role: User.Role,
+    token: String? = null,
     callback: (suspend TestApplicationCall.(incoming: ReceiveChannel<Frame>, outgoing: SendChannel<Frame>) -> Unit)? = null
 ) = handleWebSocketConversation(USERS) { incoming, outgoing ->
+    val message = if (token == null)
+        """{
+            "nickname": "$nickname", 
+            "role": "$role"
+        }""".trimIndent()
+    else
+        """{
+            "nickname": "$nickname", 
+            "role": "$role",
+            "token": "$token"
+        }""".trimIndent()
+
     outgoing.send(
-        Frame.Text(
-            """{
-                    "nickname": "$nickname", 
-                    "role": "$role"
-                }""".trimIndent()
-        )
+        Frame.Text(message)
     )
     callback?.invoke(this, incoming, outgoing)
 }
