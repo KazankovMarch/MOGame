@@ -6,7 +6,7 @@ sealed class RegistrationResponse {
     ) : RegistrationResponse()
 
     data class Failure(
-        val reason: String
+        val error: String
     ) : RegistrationResponse()
 
     companion object {
