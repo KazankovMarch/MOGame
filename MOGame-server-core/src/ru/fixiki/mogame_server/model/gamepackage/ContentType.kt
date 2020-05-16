@@ -1,8 +1,10 @@
 package ru.fixiki.mogame_server.model.gamepackage
 
-enum class ContentType(stringValue: String) {
+enum class ContentType(val stringValue: String) {
     TEXT("text"),
     IMAGE("image"),
     VIDEO("video"),
-    AUDIO("voice"),
+    VOICE("voice"),
+    SAY("say"),
+    MARKER("marker")
 }

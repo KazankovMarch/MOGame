@@ -16,7 +16,7 @@ object MediaContentResolver {
     fun getContent(name: String, type: ContentType): File {
         val folder = when (type) {
             ContentType.IMAGE -> IMAGES
-            ContentType.AUDIO -> AUDIO
+            ContentType.VOICE -> AUDIO
             ContentType.VIDEO -> VIDEO
             else -> throw IllegalArgumentException("Getting content with invalid type: $type")
         }
