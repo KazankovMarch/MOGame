@@ -216,19 +216,10 @@ class GamePackageLoaderTest {
                 )
             )
         )
-        assertEquals(
-            """
-                expected:
-                ${objectMapper.writeValueAsString(expectedPackage)}
-                loaded:
-                ${objectMapper.writeValueAsString(loadedPackage)}
-                
-                
-                
-            """,
-            expectedPackage,
-            loadedPackage
-        )
+        val expectedJson = objectMapper.writeValueAsString(expectedPackage)
+        val loadedJson = objectMapper.writeValueAsString(loadedPackage)
+        assertEquals(expectedJson, loadedJson)
+        assertEquals(expectedPackage, loadedPackage)
     }
 
     private fun uberQuestion(
