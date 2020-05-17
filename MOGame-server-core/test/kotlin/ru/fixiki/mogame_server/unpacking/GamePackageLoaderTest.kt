@@ -31,8 +31,9 @@ class GamePackageLoaderTest {
     }
 
     @Test
-    fun `WHEN package is valid THEN atoms loaded`() {
+    fun `WHEN package is valid THEN it's all loaded`() {
         val loadedPackage = loadTestPackage(TOTAL_PACKAGE)
+        println(objectMapper.writeValueAsString(loadedPackage))
         val expectedPackage = GamePackage(
             name = TOTAL_PACKAGE,
             publisher = "Тестовый издатель",
@@ -69,141 +70,75 @@ class GamePackageLoaderTest {
                                 uberQuestion(
                                     price = 200,
                                     firstText = "вопрос2",
-                                    typeParams = emptyList()
+                                    questionType = QuestionType.Auction()
                                 ),
                                 uberQuestion(
                                     price = 300,
                                     firstText = "вопрос3",
-                                    typeParams = listOf(
-                                        Param().apply {
-                                            name = QuestionParameterType.THEME
-                                            value = "тема"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.COST
-                                            value = "555"
-                                        }
+                                    questionType = QuestionType.Cat(
+                                        theme = "тема",
+                                        cost = 555
                                     )
                                 ),
                                 uberQuestion(
                                     price = 400,
                                     firstText = "вопрос4",
-                                    typeParams = listOf(
-                                        Param().apply {
-                                            name = QuestionParameterType.THEME
-                                            value = "тема1"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.COST
-                                            value = "111"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.SELF
-                                            value = "true"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.KNOWS
-                                            value = "before"
-                                        }
+                                    questionType = QuestionType.BagCat(
+                                        theme = "тема1",
+                                        cost = 111,
+                                        self = true,
+                                        knows = QuestionType.BagCat.Knows.BEFORE
                                     )
                                 ),
                                 uberQuestion(
                                     price = 500,
                                     firstText = "вопрос5",
-                                    typeParams = listOf(
-                                        Param().apply {
-                                            name = QuestionParameterType.THEME
-                                            value = "тема2"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.COST
-                                            value = "222"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.SELF
-                                            value = "true"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.KNOWS
-                                            value = "after"
-                                        }
+                                    questionType = QuestionType.BagCat(
+                                        theme = "тема2",
+                                        cost = 222,
+                                        self = true,
+                                        knows = QuestionType.BagCat.Knows.AFTER
                                     )
                                 ),
                                 uberQuestion(
                                     price = 500,
                                     firstText = "вопрос6",
-                                    typeParams = listOf(
-                                        Param().apply {
-                                            name = QuestionParameterType.THEME
-                                            value = "тема3"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.COST
-                                            value = "333"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.SELF
-                                            value = "true"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.KNOWS
-                                            value = "never"
-                                        }
+                                    questionType = QuestionType.BagCat(
+                                        theme = "тема3",
+                                        cost = 333,
+                                        self = true,
+                                        knows = QuestionType.BagCat.Knows.NEVER
                                     )
                                 ),
                                 uberQuestion(
                                     price = 500,
                                     firstText = "вопрос7",
-                                    typeParams = listOf(
-                                        Param().apply {
-                                            name = QuestionParameterType.THEME
-                                            value = "тема4"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.COST
-                                            value = "444"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.SELF
-                                            value = "false"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.KNOWS
-                                            value = "before"
-                                        }
+                                    questionType = QuestionType.BagCat(
+                                        theme = "тема4",
+                                        cost = 444,
+                                        self = false,
+                                        knows = QuestionType.BagCat.Knows.BEFORE
                                     )
                                 ),
                                 uberQuestion(
                                     price = 500,
                                     firstText = "вопрос8",
-                                    typeParams = listOf(
-                                        Param().apply {
-                                            name = QuestionParameterType.THEME
-                                            value = "тема5"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.COST
-                                            value = "555"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.SELF
-                                            value = "false"
-                                        },
-                                        Param().apply {
-                                            name = QuestionParameterType.KNOWS
-                                            value = "after"
-                                        }
+                                    questionType = QuestionType.BagCat(
+                                        theme = "тема5",
+                                        cost = 555,
+                                        self = false,
+                                        knows = QuestionType.BagCat.Knows.AFTER
                                     )
                                 ),
                                 uberQuestion(
                                     price = 500,
                                     firstText = "вопрос9",
-                                    typeParams = emptyList()
+                                    questionType = QuestionType.Sponsored()
                                 ),
                                 uberQuestion(
                                     price = 500,
                                     firstText = "вопрос10",
-                                    typeParams = emptyList()
+                                    questionType = QuestionType.Other()
                                 )
                             )
                         )
@@ -298,7 +233,7 @@ class GamePackageLoaderTest {
 
     private fun uberQuestion(
         firstText: String,
-        typeParams: List<Param>? = null,
+        questionType: QuestionType = QuestionType.Usual(),
         price: Int
     ) = Question(
         price = price,
@@ -353,6 +288,6 @@ class GamePackageLoaderTest {
             "неправильный ответ",
             "неправильный ответ 2"
         ),
-        typeParams = typeParams
+        type = questionType
     )
 }

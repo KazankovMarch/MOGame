@@ -9,20 +9,5 @@ data class Question(
     val scenario: List<Atom>,
     val right: List<String>,
     val wrong: List<String>? = null,
-    @JacksonXmlProperty(localName = "type")
-    val typeParams: List<Param>? = null
-) {
-    val questionType =
-        if (typeParams == null) {
-            Type.NORMAL
-        } else when (typeParams.size) {
-            0 -> Type.AUCTION
-            2 -> Type.CAT
-            4 -> Type.BAG_CAT
-            else -> throw IllegalArgumentException("invalid type size: $typeParams")
-        }
-
-    enum class Type {
-        AUCTION, CAT, BAG_CAT, NORMAL
-    }
-}
+    val type: QuestionType = QuestionType.Usual()
+)
