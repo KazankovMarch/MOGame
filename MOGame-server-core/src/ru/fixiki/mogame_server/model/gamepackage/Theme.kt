@@ -3,5 +3,5 @@ package ru.fixiki.mogame_server.model.gamepackage
 data class Theme(
         val name: String,
         val questions: List<Question>,
-        val info: Info?
+        val info: Info? = null
 )

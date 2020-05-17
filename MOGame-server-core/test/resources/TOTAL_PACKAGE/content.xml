@@ -1,0 +1,494 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package name="TOTAL_PACKAGE" version="4" id="3a40deff-6874-41c2-b3eb-aed682ec66fe" restriction="18+" date="16.05.2020"
+         publisher="Тестовый издатель" difficulty="5" logo="@TEST_IMAGE.png" language="ru-RU"
+         xmlns="http://vladimirkhil.com/ygpackage3.0.xsd">
+    <tags>
+        <tag>тестовая тематика</tag>
+    </tags>
+    <info>
+        <authors>
+            <author>ANDREY</author>
+        </authors>
+        <sources>
+            <source>тестовый источник</source>
+            <source>ти2</source>
+        </sources>
+        <comments>тестовый комментарий</comments>
+    </info>
+    <rounds>
+        <round name="тест-рануд1">
+            <info>
+                <authors>
+                    <author>теставтор2</author>
+                    <author>теставтрор</author>
+                </authors>
+                <sources>
+                    <source>источник2</source>
+                    <source>источник</source>
+                </sources>
+                <comments>комент1</comments>
+            </info>
+            <themes>
+                <theme name="тестовая тема 1">
+                    <info>
+                        <authors>
+                            <author>автор1</author>
+                            <author>автор2</author>
+                        </authors>
+                        <sources>
+                            <source>источник1</source>
+                            <source>источник2</source>
+                        </sources>
+                        <comments>комментарий</comments>
+                    </info>
+                    <questions>
+                        <question price="100">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <scenario>
+                                <atom>вопрос1</atom>
+                                <atom type="image">@TEST_IMAGE.png</atom>
+                                <atom type="say">Устный текст</atom>
+                                <atom>текст</atom>
+                                <atom type="video">@ezgif-6-ad18a845a591.mp4</atom>
+                                <atom type="marker"></atom>
+                                <atom type="voice">@426888__thisusernameis__beep4.wav</atom>
+                                <atom>текст ответа</atom>
+                                <atom type="image">
+                                    https://sun9-37.userapi.com/GXRpRh9eDG2zCcoyg7qyxPLbKZBZ9OF-mN5fyA/euKcqP5h3dY.jpg
+                                </atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                        <question price="200">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <type name="auction"/>
+                            <scenario>
+                                <atom>вопрос2</atom>
+                                <atom type="image">@TEST_IMAGE.png</atom>
+                                <atom type="say">Устный текст</atom>
+                                <atom>текст</atom>
+                                <atom type="video">@ezgif-6-ad18a845a591.mp4</atom>
+                                <atom type="marker"></atom>
+                                <atom type="voice">@426888__thisusernameis__beep4.wav</atom>
+                                <atom>текст ответа</atom>
+                                <atom type="image">
+                                    https://sun9-37.userapi.com/GXRpRh9eDG2zCcoyg7qyxPLbKZBZ9OF-mN5fyA/euKcqP5h3dY.jpg
+                                </atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                        <question price="300">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <type name="cat">
+                                <param name="theme">тема</param>
+                                <param name="cost">555</param>
+                            </type>
+                            <scenario>
+                                <atom>вопрос3</atom>
+                                <atom type="image">@TEST_IMAGE.png</atom>
+                                <atom type="say">Устный текст</atom>
+                                <atom>текст</atom>
+                                <atom type="video">@ezgif-6-ad18a845a591.mp4</atom>
+                                <atom type="marker"></atom>
+                                <atom type="voice">@426888__thisusernameis__beep4.wav</atom>
+                                <atom>текст ответа</atom>
+                                <atom type="image">
+                                    https://sun9-37.userapi.com/GXRpRh9eDG2zCcoyg7qyxPLbKZBZ9OF-mN5fyA/euKcqP5h3dY.jpg
+                                </atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                        <question price="400">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <type name="bagcat">
+                                <param name="theme">тема1</param>
+                                <param name="cost">111</param>
+                                <param name="self">true</param>
+                                <param name="knows">before</param>
+                            </type>
+                            <scenario>
+                                <atom>вопрос4</atom>
+                                <atom type="image">@TEST_IMAGE.png</atom>
+                                <atom type="say">Устный текст</atom>
+                                <atom>текст</atom>
+                                <atom type="video">@ezgif-6-ad18a845a591.mp4</atom>
+                                <atom type="marker"></atom>
+                                <atom type="voice">@426888__thisusernameis__beep4.wav</atom>
+                                <atom>текст ответа</atom>
+                                <atom type="image">
+                                    https://sun9-37.userapi.com/GXRpRh9eDG2zCcoyg7qyxPLbKZBZ9OF-mN5fyA/euKcqP5h3dY.jpg
+                                </atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                        <question price="500">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <type name="bagcat">
+                                <param name="theme">тема2</param>
+                                <param name="cost">222</param>
+                                <param name="self">true</param>
+                                <param name="knows">after</param>
+                            </type>
+                            <scenario>
+                                <atom>вопрос5</atom>
+                                <atom type="image">@TEST_IMAGE.png</atom>
+                                <atom type="say">Устный текст</atom>
+                                <atom>текст</atom>
+                                <atom type="video">@ezgif-6-ad18a845a591.mp4</atom>
+                                <atom type="marker"></atom>
+                                <atom type="voice">@426888__thisusernameis__beep4.wav</atom>
+                                <atom>текст ответа</atom>
+                                <atom type="image">
+                                    https://sun9-37.userapi.com/GXRpRh9eDG2zCcoyg7qyxPLbKZBZ9OF-mN5fyA/euKcqP5h3dY.jpg
+                                </atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                        <question price="500">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <type name="bagcat">
+                                <param name="theme">тема3</param>
+                                <param name="cost">333</param>
+                                <param name="self">true</param>
+                                <param name="knows">never</param>
+                            </type>
+                            <scenario>
+                                <atom>вопрос6</atom>
+                                <atom type="image">@TEST_IMAGE.png</atom>
+                                <atom type="say">Устный текст</atom>
+                                <atom>текст</atom>
+                                <atom type="video">@ezgif-6-ad18a845a591.mp4</atom>
+                                <atom type="marker"></atom>
+                                <atom type="voice">@426888__thisusernameis__beep4.wav</atom>
+                                <atom>текст ответа</atom>
+                                <atom type="image">
+                                    https://sun9-37.userapi.com/GXRpRh9eDG2zCcoyg7qyxPLbKZBZ9OF-mN5fyA/euKcqP5h3dY.jpg
+                                </atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                        <question price="500">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <type name="bagcat">
+                                <param name="theme">тема4</param>
+                                <param name="cost">444</param>
+                                <param name="self">false</param>
+                                <param name="knows">before</param>
+                            </type>
+                            <scenario>
+                                <atom>вопрос7</atom>
+                                <atom type="image">@TEST_IMAGE.png</atom>
+                                <atom type="say">Устный текст</atom>
+                                <atom>текст</atom>
+                                <atom type="video">@ezgif-6-ad18a845a591.mp4</atom>
+                                <atom type="marker"></atom>
+                                <atom type="voice">@426888__thisusernameis__beep4.wav</atom>
+                                <atom>текст ответа</atom>
+                                <atom type="image">
+                                    https://sun9-37.userapi.com/GXRpRh9eDG2zCcoyg7qyxPLbKZBZ9OF-mN5fyA/euKcqP5h3dY.jpg
+                                </atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                        <question price="500">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <type name="bagcat">
+                                <param name="theme">тема5</param>
+                                <param name="cost">555</param>
+                                <param name="self">false</param>
+                                <param name="knows">after</param>
+                            </type>
+                            <scenario>
+                                <atom>вопрос8</atom>
+                                <atom type="image">@TEST_IMAGE.png</atom>
+                                <atom type="say">Устный текст</atom>
+                                <atom>текст</atom>
+                                <atom type="video">@ezgif-6-ad18a845a591.mp4</atom>
+                                <atom type="marker"></atom>
+                                <atom type="voice">@426888__thisusernameis__beep4.wav</atom>
+                                <atom>текст ответа</atom>
+                                <atom type="image">
+                                    https://sun9-37.userapi.com/GXRpRh9eDG2zCcoyg7qyxPLbKZBZ9OF-mN5fyA/euKcqP5h3dY.jpg
+                                </atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                        <question price="500">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <type name="sponsored"/>
+                            <scenario>
+                                <atom>вопрос9</atom>
+                                <atom type="image">@TEST_IMAGE.png</atom>
+                                <atom type="say">Устный текст</atom>
+                                <atom>текст</atom>
+                                <atom type="video">@ezgif-6-ad18a845a591.mp4</atom>
+                                <atom type="marker"></atom>
+                                <atom type="voice">@426888__thisusernameis__beep4.wav</atom>
+                                <atom>текст ответа</atom>
+                                <atom type="image">
+                                    https://sun9-37.userapi.com/GXRpRh9eDG2zCcoyg7qyxPLbKZBZ9OF-mN5fyA/euKcqP5h3dY.jpg
+                                </atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                        <question price="500">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <type name="Другой"/>
+                            <scenario>
+                                <atom>вопрос10</atom>
+                                <atom type="image">@TEST_IMAGE.png</atom>
+                                <atom type="say">Устный текст</atom>
+                                <atom>текст</atom>
+                                <atom type="video">@ezgif-6-ad18a845a591.mp4</atom>
+                                <atom type="marker"></atom>
+                                <atom type="voice">@426888__thisusernameis__beep4.wav</atom>
+                                <atom>текст ответа</atom>
+                                <atom type="image">
+                                    https://sun9-37.userapi.com/GXRpRh9eDG2zCcoyg7qyxPLbKZBZ9OF-mN5fyA/euKcqP5h3dY.jpg
+                                </atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                    </questions>
+                </theme>
+            </themes>
+        </round>
+        <round name="тест-рануд2" type="final">
+            <info>
+                <authors>
+                    <author>теставтор2</author>
+                    <author>теставтрор</author>
+                </authors>
+                <sources>
+                    <source>источник2</source>
+                    <source>источник</source>
+                </sources>
+                <comments>комент1</comments>
+            </info>
+            <themes>
+                <theme name="тестовая тема 1">
+                    <info>
+                        <authors>
+                            <author>автор1</author>
+                            <author>автор2</author>
+                        </authors>
+                        <sources>
+                            <source>источник1</source>
+                            <source>источник2</source>
+                        </sources>
+                        <comments>комментарий</comments>
+                    </info>
+                    <questions>
+                        <question price="555">
+                            <info>
+                                <authors>
+                                    <author>автор вопроса</author>
+                                    <author>автор вопроса2</author>
+                                </authors>
+                                <sources>
+                                    <source>источник вопроса</source>
+                                    <source>ив2</source>
+                                </sources>
+                                <comments>комментарий к вопросу</comments>
+                            </info>
+                            <scenario>
+                                <atom>текст 1</atom>
+                                <atom>текст2</atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                                <answer>правильный ответ2</answer>
+                            </right>
+                            <wrong>
+                                <answer>неправильный ответ</answer>
+                                <answer>неправильный ответ 2</answer>
+                            </wrong>
+                        </question>
+                    </questions>
+                </theme>
+                <theme name="тестовая тема 2">
+                    <questions>
+                        <question price="100">
+                            <scenario>
+                                <atom>текст</atom>
+                            </scenario>
+                            <right>
+                                <answer>правильный ответ</answer>
+                            </right>
+                        </question>
+                    </questions>
+                </theme>
+            </themes>
+        </round>
+    </rounds>
+</package>

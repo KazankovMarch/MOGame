@@ -5,12 +5,12 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 data class Question(
     @JacksonXmlProperty(isAttribute = true)
     val price: Int,
-    val info: Info?,
+    val info: Info? = null,
     val scenario: List<Atom>,
     val right: List<String>,
-    val wrong: List<String>?,
+    val wrong: List<String>? = null,
     @JacksonXmlProperty(localName = "type")
-    val typeParams: List<Param>?
+    val typeParams: List<Param>? = null
 ) {
     val questionType =
         if (typeParams == null) {

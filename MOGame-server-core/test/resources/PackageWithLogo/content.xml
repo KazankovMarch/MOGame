@@ -1,1 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?><package name="PackageWithLogo" version="4" id="a9c9db0b-6882-4893-90f3-b709d81fbe7f" date="01.05.2020" difficulty="5" logo="@TEST_IMAGE.png" xmlns="http://vladimirkhil.com/ygpackage3.0.xsd"><info><authors><author>Андрей</author></authors></info><rounds><round name="1-й раунд"><themes><theme name="testTheme"><questions><question price="100"><scenario><atom>testQ</atom></scenario><right><answer>1</answer></right></question></questions></theme></themes></round></rounds></package>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package name="PackageWithLogo" version="4" id="a9c9db0b-6882-4893-90f3-b709d81fbe7f" date="01.05.2020" difficulty="5"
+         logo="@TEST_IMAGE.png" xmlns="http://vladimirkhil.com/ygpackage3.0.xsd">
+    <info>
+        <authors>
+            <author>Андрей</author>
+        </authors>
+    </info>
+    <rounds>
+        <round name="1-й раунд">
+            <themes>
+                <theme name="testTheme">
+                    <questions>
+                        <question price="100">
+                            <scenario>
+                                <atom>testQ</atom>
+                            </scenario>
+                            <right>
+                                <answer>1</answer>
+                            </right>
+                        </question>
+                    </questions>
+                </theme>
+            </themes>
+        </round>
+    </rounds>
+</package>
